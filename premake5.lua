@@ -9,8 +9,10 @@ workspace "FakeEngine"
 	includedir["Glad"] = "FakeEngine/vendor/Glad/include"
 	includedir["stb_image"] = "FakeEngine/vendor/stb_image"
 	
+	group "Dependencies"
 	include "FakeEngine/vendor/GLFW"
 	include "FakeEngine/vendor/Glad"
+	group ""
 	
 	project "FakeEngine"
 		location "FakeEngine"

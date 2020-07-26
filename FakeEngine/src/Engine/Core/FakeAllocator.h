@@ -31,9 +31,9 @@ struct FakeAllocator
 		Data = nullptr;
 		if (0 == size) return;
 
-		// TODO: LOG
-		Data = new byte[size];
 		Size = size;
+		Data = new byte[Size];
+		FAKE_LOG_TRACE("Allocating %s bytes.", Size);
 		}
 
 	void ZeroInitialize()
@@ -44,7 +44,7 @@ struct FakeAllocator
 
 	void Write(byte *data, uint32_t size, uint32_t offset = 0)
 		{
-		// TODO: ASSERT offset + size <= Size SONST BufferOverflow
+		FAKE_ASSERT(offset + size <= Size, "Buffer Overflow!");
 		memcpy(Data + offset, data, size);
 		}
 

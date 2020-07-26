@@ -4,6 +4,8 @@
 #include <iostream>
 
 #include "Engine/Core/Defines/FakeConsole.h"
+#include "Engine/Core/Defines/FakeMouseButtonCodes.h"
+#include "Engine/Core/Defines/FakeKeyCodes.h"
 
 #define MAX(A, B) ( ((A) > (B)) ? (A) : (B) )
 #define MIN(A, B) ( ((A) < (B)) ? (A) : (B) )

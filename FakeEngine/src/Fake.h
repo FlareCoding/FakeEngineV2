@@ -11,3 +11,6 @@
 #include "Engine/Core/Events/FakeApplicationEvents.h"
 #include "Engine/Core/Events/FakeKeyEvents.h"
 #include "Engine/Core/Events/FakeMouseEvents.h"
+
+/* DataTypes */
+#include "Engine/Core/DataTypes/FakeDataTypes.h"

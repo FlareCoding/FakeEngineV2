@@ -4,15 +4,16 @@
 
 class SandboxApp : public FakeApplication
 	{
-	virtual void OnInit() override
-		{
-		PushLayer(new ExampleLayer());
-		}
+	public:
+		virtual void OnInit() override
+			{
+			PushLayer(new ExampleLayer());
+			}
 
-	virtual void OnShutdown() override
-		{
+		virtual void OnShutdown() override
+			{
 
-		}
+			}
 	};
 
 FakeApplication *CreateApp()

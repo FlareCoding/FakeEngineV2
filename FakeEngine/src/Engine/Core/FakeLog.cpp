@@ -22,7 +22,6 @@ std::string FakeLog::Replace(const std::string &format, const std::string &patte
 	ss << replaceValue;
 	
 	return out.replace(out.find(pattern), pattern.length(), ss.str());
-	return out;
 	}
 
 void FakeLog::Print(const char *format, ...)
