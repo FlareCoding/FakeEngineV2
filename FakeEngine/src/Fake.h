@@ -14,3 +14,6 @@
 
 /* DataTypes */
 #include "Engine/Core/DataTypes/FakeDataTypes.h"
+
+/* Maths */
+#include "Engine/Core/Maths/FakeMaths.h"

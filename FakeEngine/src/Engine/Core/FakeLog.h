@@ -21,8 +21,13 @@ class FakeLog
 		static void Print(const char *format, ...);
 	};
 
-#define FAKE_ASSERT_INSTANT(x) { if (!(x)) { __debugbreak(); } }
-#define FAKE_ASSERT(x, msg) { if (!(x)) { FakeLog::SetLogLevel(FakeLogLevel::FatalLevel); FakeLog::Print("Assertion failed: %s", msg); __debugbreak(); } }
+#ifdef FAKE_DEBUG
+	#define FAKE_ASSERT_INSTANT(x) { if (!(x)) { __debugbreak(); } }
+	#define FAKE_ASSERT(x, msg) { if (!(x)) { FakeLog::SetLogLevel(FakeLogLevel::FatalLevel); FakeLog::Print("Assertion failed: %s", msg); __debugbreak(); } }
+#elif FAKE_RELEASE
+	#define FAKE_ASSERT_INSTANT(x)
+	#define FAKE_ASSERT(x, msg) { if (!(x)) { FakeLog::SetLogLevel(FakeLogLevel::ErrorLevel); FakeLog::Print("Assertion failed: %s", msg); } }
+#endif
 
 #define FAKE_LOG(format, ...) FakeLog::SetLogLevel(FakeLogLevel::None); FakeLog::Print(format, __VA_ARGS__);
 #define FAKE_LOG_TRACE(format, ...) FakeLog::SetLogLevel(FakeLogLevel::TraceLevel); FakeLog::Print(format, __VA_ARGS__);

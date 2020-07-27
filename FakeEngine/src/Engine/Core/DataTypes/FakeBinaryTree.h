@@ -2,7 +2,7 @@
 
 #include "FakePch.h"
 #include "FakeQueue.h"
-#include "Engine/Core/Maths/FakeBasicOperators.h"
+#include "Engine/Core/Maths/FakeMathFunctions.h"
 
 template<typename T>
 class FakeBinaryTree
@@ -18,10 +18,10 @@ class FakeBinaryTree
 				{
 				uint32_t leftVal = 0, rightVal = 0;
 
-				if (!this->Left)
+				if (this->Left)
 					leftVal = this->Left->CalcHeight();
 
-				if (!this->Right)
+				if (this->Right)
 					rightVal = this->Right->CalcHeight();
 
 				return 1 + MAX(leftVal, rightVal);
@@ -250,7 +250,7 @@ class FakeBinaryTree
 			FakeQueue<Node*> q;
 			q.Enqueue(node);
 
-			T min = FakeBasicOperators::MaxValue<T>();
+			T min = fake_max_value<T>();
 			while (!q.IsEmpty())
 				{
 				Node *current = q.Front();
@@ -275,7 +275,7 @@ class FakeBinaryTree
 			FakeQueue<Node*> q;
 			q.Enqueue(node);
 
-			T max = FakeBasicOperators::MinValue<T>();
+			T max = fake_min_value<T>();
 			while (!q.IsEmpty())
 				{
 				Node *current = q.Front();
@@ -300,7 +300,7 @@ class FakeBinaryTree
 			FakeQueue<Node*> q;
 			q.Enqueue(node);
 
-			T min = FakeBasicOperators::MaxValue<T>();
+			T min = fake_max_value<T>();
 			Node *ret = nullptr;
 			while (!q.IsEmpty())
 				{
@@ -329,7 +329,7 @@ class FakeBinaryTree
 			FakeQueue<Node*> q;
 			q.Enqueue(node);
 
-			T max = FakeBasicOperators::MinValue<T>();
+			T max = fake_min_value<T>();
 			Node *ret = nullptr;
 			while (!q.IsEmpty())
 				{

@@ -7,9 +7,9 @@
 #include "Engine/Core/Defines/FakeMouseButtonCodes.h"
 #include "Engine/Core/Defines/FakeKeyCodes.h"
 
-#define MAX(A, B) ( ((A) > (B)) ? (A) : (B) )
-#define MIN(A, B) ( ((A) < (B)) ? (A) : (B) )
-#define ABS(A)	  ( ((A)) > 0 ) ? (A) : -(A) )
+#define MAX(A, B) ( ((A)  > (B)) ? (A) :  (B) )
+#define MIN(A, B) ( ((A)  < (B)) ? (A) :  (B) )
+#define ABS(A)	  ( ((A)  >= 0 ) ? (A) : -(A) )
 #define BIT(x) (1 << x)
 
 #define FAKE_BIND_EVENT_FUNCTION(fn) std::bind(&fn, this, std::placeholders::_1)
