@@ -6,13 +6,13 @@
 class FakeLayer
 	{
 	private:
-		std::string DebugName;
+		FakeString DebugName;
 
 	public:
-		FakeLayer(const std::string &debugName = "DefaultLayer");
+		FakeLayer(const FakeString &debugName = "DefaultLayer");
 		virtual ~FakeLayer();
 
-		inline const std::string &GetName() { return DebugName; }
+		inline const FakeString &GetName() { return DebugName; }
 
 		virtual void OnAttach() {}
 		virtual void OnDetach() {}

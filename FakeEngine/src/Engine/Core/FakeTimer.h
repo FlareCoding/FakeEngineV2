@@ -39,13 +39,13 @@ class FakeTimer
 			return (double)std::chrono::duration_cast<std::chrono::microseconds>(now).count();
 			}
 
-		static std::string GetTimeStamp()
+		static FakeString GetTimeStamp()
 			{
 			std::time_t t = std::time(0);
 			std::tm now;
 			localtime_s(&now, &t);
 
-			return std::to_string(now.tm_mday) + '.' + std::to_string(now.tm_mon + 1) + '.' + std::to_string(now.tm_year + 1900) + ' '
-				+ std::to_string(now.tm_hour) + ':' + std::to_string(now.tm_min) + ':' + std::to_string(now.tm_sec);
+			return FakeString(std::to_string(now.tm_mday) + '.' + std::to_string(now.tm_mon + 1) + '.' + std::to_string(now.tm_year + 1900) + ' '
+				+ std::to_string(now.tm_hour) + ':' + std::to_string(now.tm_min) + ':' + std::to_string(now.tm_sec));
 			}
 	};

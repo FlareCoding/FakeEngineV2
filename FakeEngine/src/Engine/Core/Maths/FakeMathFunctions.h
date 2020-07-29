@@ -50,10 +50,10 @@ inline T fake_faculty(T num)
 template<typename T>
 inline T fake_pow(T basis, uint32_t potenz)
 	{
-	if (0 == potenz)
+	if (static_cast<T>(0) == potenz)
 		return static_cast<T>(1);
 
-	T ret = static_cast<T>(basis);
+	T ret = basis;
 	uint32_t i;
 
 	for (i = 0; i < potenz; ++i)
@@ -64,7 +64,8 @@ inline T fake_pow(T basis, uint32_t potenz)
 	return ret / static_cast<T>(2);
 	}
 
-// TODO: check if it works with ints
+// HINT: fake_sqrt returns wrong values if ints are provided as argument
+// TODO: static_casts for raw values
 template<typename T>
 inline T fake_sqrt(T value)
 	{

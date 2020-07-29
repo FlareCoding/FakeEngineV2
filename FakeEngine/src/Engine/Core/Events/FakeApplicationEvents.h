@@ -13,7 +13,7 @@ class FakeWindowResizeEvent : public FakeEvent
 		inline unsigned int GetWidth() const { return Width; }
 		inline unsigned int GetHeight() const { return Height; }
 
-		std::string ToString() const override
+		FakeString ToString() const override
 			{
 			std::stringstream ss;
 			ss << "WindowResizeEvent: " << Width << ", " << Height;
@@ -31,7 +31,7 @@ class FakeWindowCloseEvent : public FakeEvent
 		FAKE_EVENT_CLASS_TYPE(WindowClose)
 		FAKE_EVENT_CLASS_CATEGORY(EventCategoryApplication)
 
-		std::string ToString() const override
+		FakeString ToString() const override
 			{
 			return "WindowCloseEvent";
 			}
@@ -52,7 +52,7 @@ class FakeAppRenderEvent : public FakeEvent
 		FAKE_EVENT_CLASS_TYPE(AppRender)
 		FAKE_EVENT_CLASS_CATEGORY(EventCategoryApplication)
 
-		std::string ToString() const override
+		FakeString ToString() const override
 			{
 			return "AppRenderEvent";
 			}
@@ -65,7 +65,7 @@ class FakeAppUpdateEvent : public FakeEvent
 		FAKE_EVENT_CLASS_TYPE(AppUpdate)
 		FAKE_EVENT_CLASS_CATEGORY(EventCategoryApplication)
 
-		std::string ToString() const override
+		FakeString ToString() const override
 			{
 			return "AppUpdate";
 			}
@@ -83,7 +83,7 @@ class FakeFileMenuEvent : public FakeEvent
 		FAKE_EVENT_CLASS_TYPE(FileMenu)
 		FAKE_EVENT_CLASS_CATEGORY(EventCategoryApplication)
 
-		std::string ToString() const override
+		FakeString ToString() const override
 			{
 			std::stringstream ss;
 			ss << "FileMenuEvent: " << ID;

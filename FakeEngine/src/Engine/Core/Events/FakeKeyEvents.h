@@ -23,7 +23,7 @@ class FakeKeyPressedEvent : public FakeKeyEvent
 		FakeKeyPressedEvent(int keyCode, int repeatCount) : FakeKeyEvent(keyCode), RepeatCount(repeatCount) {}
 		inline int GetRepeatCount() const { return RepeatCount; }
 
-		std::string ToString() const override
+		FakeString ToString() const override
 			{
 			std::stringstream ss;
 			ss << "KeyPressedEvent: " << KeyCode << " (" << RepeatCount << " repeats)";
@@ -38,7 +38,7 @@ class FakeKeyReleasedEvent : public FakeKeyEvent
 	public:
 		FakeKeyReleasedEvent(int keyCode) : FakeKeyEvent(keyCode) {}
 
-		std::string ToString() const override
+		FakeString ToString() const override
 			{
 			std::stringstream ss;
 			ss << "KeyReleasedEvent: " << KeyCode;
@@ -53,7 +53,7 @@ class FakeKeyTypedEvent : public FakeKeyEvent
 	public:
 		FakeKeyTypedEvent(int keyCode) : FakeKeyEvent(keyCode) {}
 
-		std::string ToString() const override
+		FakeString ToString() const override
 			{
 			std::stringstream ss;
 			ss << "KeyTypedEvent: " << KeyCode;

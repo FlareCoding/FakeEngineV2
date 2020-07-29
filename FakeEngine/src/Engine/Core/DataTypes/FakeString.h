@@ -94,4 +94,12 @@ class FakeString
 
 			printf("\n");
 			}
+
+		friend std::ostream &operator<<(std::ostream &stream, const FakeString &string)
+			{
+			for (uint32_t i = 0; i < string.Size; ++i)
+				stream << string.Data[i];
+
+			return stream;
+			}
 	};

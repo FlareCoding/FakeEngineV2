@@ -1,7 +1,7 @@
 #include "FakePch.h"
 #include "FakeLayer.h"
 
-FakeLayer::FakeLayer(const std::string &debugName)
+FakeLayer::FakeLayer(const FakeString &debugName)
 	: DebugName(debugName)
 	{
 	}

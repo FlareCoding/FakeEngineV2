@@ -38,7 +38,7 @@ class FakeEvent
 		virtual const char *GetName() const = 0;
 		virtual int GetCategoryFlags() const = 0;
 
-		virtual std::string ToString() const
+		virtual FakeString ToString() const
 			{
 			return GetName();
 			}

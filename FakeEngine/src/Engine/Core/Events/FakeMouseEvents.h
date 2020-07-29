@@ -12,7 +12,7 @@ class FakeMouseMovedEvent : public FakeEvent
 		inline double GetMouseX() const { return MouseX; }
 		inline double GetMouseY() const { return MouseY; }
 
-		std::string ToString() const override
+		FakeString ToString() const override
 			{
 			std::stringstream ss;
 			ss << "MouseMovedEvent: " << MouseX << ", " << MouseY;
@@ -33,7 +33,7 @@ class FakeMouseScrolledEvent : public FakeEvent
 		inline double GetMouseXOffset() const { return MouseXOffset; }
 		inline double GetMouseYOffset() const { return MouseYOffset; }
 
-		std::string ToString() const override
+		FakeString ToString() const override
 			{
 			std::stringstream ss;
 			ss << "MouseScrolledEvent: " << MouseXOffset << ", " << MouseYOffset;
@@ -61,7 +61,7 @@ class FakeMouseButtonPressedEvent : public FakeMouseButtonEvent
 		FakeMouseButtonPressedEvent(int button) : FakeMouseButtonEvent(button) {}
 		FAKE_EVENT_CLASS_TYPE(MouseButtonPressed)
 
-		std::string ToString() const override
+		FakeString ToString() const override
 			{
 			std::stringstream ss;
 			ss << "MouseButtonPressedEvent: " << ButtonCode;
@@ -75,7 +75,7 @@ class FakeMouseButtonReleasedEvent : public FakeMouseButtonEvent
 		FakeMouseButtonReleasedEvent(int button) : FakeMouseButtonEvent(button) {}
 		FAKE_EVENT_CLASS_TYPE(MouseButtonReleased)
 
-		std::string ToString() const override
+		FakeString ToString() const override
 			{
 			std::stringstream ss;
 			ss << "MouseButtonReleasedEvent: " << ButtonCode;

@@ -23,3 +23,4 @@
 
 #include "Engine/Core/FakeCore.h"
 #include "Engine/Core/FakeLog.h"
+#include "Engine/Core/DataTypes/FakeString.h"

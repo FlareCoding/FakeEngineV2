@@ -25,8 +25,8 @@ struct FakeVector2
 		this->y = y;
 		}
 
-	FakeVector2(const FakeVector2<T> &other) = default;
-	FakeVector2<T> &operator=(const FakeVector2<T> &other) = default;
+	FakeVector2(const FakeVector2<T>&) = default;
+	FakeVector2<T> &operator=(const FakeVector2<T>&) = default;
 
 	FakeVector2<T> &Add(const FakeVector2<T> &other)
 		{
@@ -214,22 +214,22 @@ struct FakeVector2
 
 	friend FakeVector2<T> operator*(FakeVector2<T> left, T value)
 		{
-		return left.Multiply(value);
+		return left.MultiplyScalar(value);
 		}
 
 	friend FakeVector2<T> operator/(FakeVector2<T> left, T value)
 		{
-		return left.Divide(value);
+		return left.DivideScalar(value);
 		}
 
-	FakeVector2<T> operator++()
+	FakeVector2<T> &operator++()
 		{
 		++x;
 		++y;
 		return *this;
 		}
 
-	FakeVector2<T> operator--()
+	FakeVector2<T> &operator--()
 		{
 		--x;
 		--y;
@@ -281,7 +281,17 @@ struct FakeVector2
 		return x == other.x && y == other.y;
 		}
 
+	bool operator==(const FakeVector2<T> &other) const
+		{
+		return x == other.x && y == other.y;
+		}
+
 	bool operator!=(const FakeVector2<T> &other)
+		{
+		return !(*this == other);
+		}
+
+	bool operator!=(const FakeVector2<T> &other) const
 		{
 		return !(*this == other);
 		}
@@ -291,12 +301,27 @@ struct FakeVector2
 		return x < other.x && y < other.y;
 		}
 
+	bool operator<(const FakeVector2<T> &other) const
+		{
+		return x < other.x && y < other.y;
+		}
+
 	bool operator>(const FakeVector2<T> &other)
 		{
 		return x > other.x && y > other.y;
 		}
 
+	bool operator>(const FakeVector2<T> &other) const
+		{
+		return y > other.x && y > other.y;
+		}
+
 	bool operator<=(const FakeVector2<T> &other)
+		{
+		return x <= other.x && y <= other.y;
+		}
+
+	bool operator<=(const FakeVector2<T> &other) const
 		{
 		return x <= other.x && y <= other.y;
 		}
@@ -306,7 +331,17 @@ struct FakeVector2
 		return x >= other.x && y >= other.y;
 		}
 
+	bool operator>=(const FakeVector2<T> &other) const
+		{
+		return x >= other.x && y >= other.y;
+		}
+
 	T &operator[](uint32_t i)
+		{
+		return *((T*)this + i);
+		}
+
+	const T &operator[](uint32_t i) const
 		{
 		return *((T*)this + i);
 		}

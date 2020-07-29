@@ -4,6 +4,10 @@
 #include "Engine/Core/Defines/FakeConsole.h"
 #include "Engine/Core/FakeTimer.h"
 
+#include "Engine/Core/Maths/FakeVector2.h"
+#include "Engine/Core/Maths/FakeVector3.h"
+#include "Engine/Core/Maths/FakeVector4.h"
+
 FakeLogLevel FakeLog::Severity = FakeLogLevel::None;
 
 bool FakeLog::Contains(const std::string &format, const std::string &pattern)
@@ -109,6 +113,35 @@ void FakeLog::Print(const char *format, ...)
 			out = Replace<double>(out, "%f", f);
 			}
 		}
+
+	if (Contains(out, "%v2f"))
+		{
+		while (Contains(out, "%v2f"))
+			{
+			FakeVec2f vector = va_arg(args, FakeVec2f);
+			out = Replace<FakeVec2f>(out, "%v2f", vector);
+			}
+		}
+
+	if (Contains(out, "%v3f"))
+		{
+		while (Contains(out, "%v3f"))
+			{
+			FakeVec3f vector = va_arg(args, FakeVec3f);
+			out = Replace<FakeVec3f>(out, "%v3f", vector);
+			}
+		}
+
+	/*
+	if (Contains(out, "%v4f"))
+		{
+		while (Contains(out, "%v4f"))
+			{
+			FakeVec4f vector = va_arg(args, FakeVec4f);
+			out = Replace<FakeVec4f>(out, "%v4f", vector);
+			}
+		}
+	*/
 
 	va_end(args);
 	std::cout << "[" << FakeTimer::GetTimeStamp() << "] " << out << std::endl;
