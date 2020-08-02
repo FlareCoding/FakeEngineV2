@@ -137,18 +137,25 @@ struct FakeVector2
 		return result;
 		}
 
-	FakeVector2<T> &Lerp(const FakeVector2<T> &other, T deltaTime)
+	FakeVector2<T> &Lerp(const FakeVector2<T> &other, T t)
 		{
-		x = x * static_cast<T>(1 - deltaTime) + other.x * deltaTime;
-		y = y * static_cast<T>(1 - deltaTime) + other.y * deltaTime;
+		if (t < static_cast<T>(0)) t = static_cast<T>(0);
+		if (t > static_cast<T>(1)) t = static_cast<T>(1);
+
+		x = x * (static_cast<T>(1) - t) + other.x * t;
+		y = y * (static_cast<T>(1) - t) + other.y * t;
+
 		return *this;
 		}
 
-	static FakeVector2<T> Lerp(const FakeVector2<T> &start, const FakeVector2<T> &end, T deltaTime)
+	static FakeVector2<T> Lerp(const FakeVector2<T> &a, const FakeVector2<T> &b, T t)
 		{
+		if (t < static_cast<T>(0)) t = static_cast<T>(0);
+		if (t > static_cast<T>(1)) t = static_cast<T>(1);
+
 		FakeVector2<T> result;
-		result.x = start.x * static_cast<T>(1 - deltaTime) + end.x * deltaTime;
-		result.y = start.y * static_cast<T>(1 - deltaTime) + end.y * deltaTime;
+		result.x = a.x * (static_cast<T>(1) - t) + b.x * t;
+		result.y = a.y * (static_cast<T>(1) - t) + b.y * t;
 		return result;
 		}
 
@@ -179,6 +186,14 @@ struct FakeVector2
 		FakeVector2<T> result;
 		result.x = MIN(MAX(vector.x, min.x), max.x);
 		result.y = MIN(MAX(vector.y, min.y), max.y);
+		return result;
+		}
+
+	friend FakeVector2<T> operator-(const FakeVector2<T> &other)
+		{
+		FakeVector2<T> result;
+		result.x = -other.x;
+		result.y = -other.y;
 		return result;
 		}
 

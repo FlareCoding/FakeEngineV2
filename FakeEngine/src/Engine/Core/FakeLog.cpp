@@ -8,6 +8,10 @@
 #include "Engine/Core/Maths/FakeVector3.h"
 #include "Engine/Core/Maths/FakeVector4.h"
 
+#include "Engine/Core/Maths/FakeMatrix2.h"
+#include "Engine/Core/Maths/FakeMatrix3.h"
+#include "Engine/Core/Maths/FakeMatrix4.h"
+
 FakeLogLevel FakeLog::Severity = FakeLogLevel::None;
 
 bool FakeLog::Contains(const std::string &format, const std::string &pattern)
@@ -132,13 +136,40 @@ void FakeLog::Print(const char *format, ...)
 			}
 		}
 
-	/*
 	if (Contains(out, "%v4f"))
 		{
 		while (Contains(out, "%v4f"))
 			{
 			FakeVec4f vector = va_arg(args, FakeVec4f);
 			out = Replace<FakeVec4f>(out, "%v4f", vector);
+			}
+		}
+
+	if (Contains(out, "%m2f"))
+		{
+		while (Contains(out, "%m2f"))
+			{
+			FakeMat2f mat = va_arg(args, FakeMat2f);
+			out = Replace<FakeMat2f>(out, "%m2f", mat);
+			}
+		}
+
+	if (Contains(out, "%m3f"))
+		{
+		while (Contains(out, "%m3f"))
+			{
+			FakeMat3f mat = va_arg(args, FakeMat3f);
+			out = Replace<FakeMat3f>(out, "%m3f", mat);
+			}
+		}
+
+	/*
+	if (Contains(out, "%m4f"))
+		{
+		while (Contains(out, "%m4f"))
+			{
+			FakeMat4f mat = va_arg(args, FakeMat4f);
+			out = Replace<FakeMat4f>(out, "%m4f", mat);
 			}
 		}
 	*/

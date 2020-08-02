@@ -75,16 +75,39 @@ class FakeString
 			return *this;
 			}
 
-		const wchar_t *ConvertToWString()
+		const wchar_t *ToWStr()
 			{
 			std::string tmp = "";
-
-			for (uint32_t i = 0; i < Size; i++)
-				tmp += Data[i];
+			memcpy(&tmp, Data, Size);
 
 			std::wstring ws(Size, L' ');
 			ws.resize(std::mbstowcs(&ws[0], tmp.c_str(), Size));
+
 			return ws.c_str();
+			}
+
+		const char *ToStr()
+			{
+			std::string tmp = "";
+			memcpy(&tmp, Data, Size);
+			return tmp.c_str();
+			}
+
+		uint32_t Length() const noexcept
+			{
+			return Size;
+			}
+
+		FakeString Replace(FakeString str, size_t length, FakeString replaceValue)
+			{
+			// TODO
+			return "";
+			}
+
+		FakeString Find(FakeString str, size_t offset = 0) const noexcept
+			{
+			// TODO
+			return "";
 			}
 
 		void Print()

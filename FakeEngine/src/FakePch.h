@@ -5,7 +5,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
-#include <string>
 #include <limits>
 #include <memory>
 #include <functional>
@@ -16,6 +15,7 @@
 #include <array>
 #include <unordered_map>
 #include <unordered_set>
+#include <string>
 
 /* Streams */
 #include <fstream>

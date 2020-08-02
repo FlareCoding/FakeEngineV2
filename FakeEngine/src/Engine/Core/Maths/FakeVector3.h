@@ -171,20 +171,27 @@ struct FakeVector3
 		return result;
 		}
 
-	FakeVector3<T> &Lerp(const FakeVector3<T> &other, T deltaTime)
+	FakeVector3<T> &Lerp(const FakeVector3<T> &other, T t)
 		{
-		x = x * static_cast<T>(1 - deltaTime) + other.x * deltaTime;
-		y = y * static_cast<T>(1 - deltaTime) + other.y * deltaTime;
-		z = z * static_cast<T>(1 - deltaTime) + other.z * deltaTime;
+		if (t < static_cast<T>(0)) t = static_cast<T>(0);
+		if (t > static_cast<T>(1)) t = static_cast<T>(1);
+
+		x = x * (static_cast<T>(1) - t) + other.x * t;
+		y = y * (static_cast<T>(1) - t) + other.y * t;
+		z = z * (static_cast<T>(1) - t) + other.z * t;
+
 		return *this;
 		}
 
-	static FakeVector3<T> Lerp(const FakeVector3<T> &start, const FakeVector3<T> &end, T deltaTime)
+	static FakeVector3<T> Lerp(const FakeVector3<T> &a, const FakeVector3<T> &b, T t)
 		{
+		if (t < static_cast<T>(0)) t = static_cast<T>(0);
+		if (t > static_cast<T>(1)) t = static_cast<T>(1);
+
 		FakeVector3<T> result;
-		result.x = start.x * static_cast<T>(1 - deltaTime) + end.x * deltaTime;
-		result.y = start.y * static_cast<T>(1 - deltaTime) + end.y * deltaTime;
-		result.z = start.z * static_cast<T>(1 - deltaTime) + end.z * deltaTime;
+		result.x = a.x * (static_cast<T>(1) - t) + b.x * t;
+		result.y = a.y * (static_cast<T>(1) - t) + b.y * t;
+		result.z = a.z * (static_cast<T>(1) - t) + b.z * t;
 		return result;
 		}
 
@@ -273,6 +280,15 @@ struct FakeVector3
 	static FakeVector3<T> ZAxis()
 		{
 		return FakeVector3<T>(0, 0, 1);
+		}
+
+	friend FakeVector3<T> operator-(const FakeVector3<T> &other)
+		{
+		FakeVector3<T> result;
+		result.x = -other.x;
+		result.y = -other.y;
+		result.z = -other.z;
+		return result;
 		}
 
 	friend FakeVector3<T> &operator+(FakeVector3<T> left, const FakeVector3<T> &right)
