@@ -10,7 +10,7 @@ class ExampleLayer : public FakeLayer
 		//	FAKE_LOG_INFO("Application starts!");
 
 			FakeString string = "Hello World!";
-			FakeString result = string.Split();
+			FakeString *result = string.Split();
 		//	std::cout << result << std::endl;
 
 			/*

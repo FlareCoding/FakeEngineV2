@@ -215,24 +215,32 @@ class FakeString
 			return NULL;
 			}
 
-		FakeString Split()
+		FakeString *Split()
 			{
-			FakeString word = "";
+			// First get the word count to construct the size of the array
+			// Then iterate through the string and put every word into the array
+
+			uint32_t wordCount = 0;
 			for (uint32_t i = 0; i < Size; ++i)
 				{
 				if (Data[i] == ' ')
-					{
-					std::cout << word << std::endl;
-					word = "";
-					}
-				else
+					++wordCount;
+				}
+
+			FakeString *result = new FakeString[wordCount];
+			FakeString word = "";
+			for (uint32_t i = 0; i < Size; ++i)
+				{
+				while (Data[i] != ' ')
 					{
 					word += Data[i];
 					}
+
+				result[i] = word;
+				word = "";
 				}
 
-			std::cout << "FIN: " << word << std::endl;
-			return "";
+			return result;
 			}
 
 		char *SplitChar()
