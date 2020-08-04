@@ -15,12 +15,11 @@
 #include <array>
 #include <unordered_map>
 #include <unordered_set>
-#include <string>
 
 /* Streams */
 #include <fstream>
 #include <sstream>
 
+#include "Engine/Core/DataTypes/FakeString.h"
 #include "Engine/Core/FakeCore.h"
 #include "Engine/Core/FakeLog.h"
-#include "Engine/Core/DataTypes/FakeString.h"

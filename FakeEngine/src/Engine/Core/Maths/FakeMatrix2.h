@@ -11,11 +11,7 @@ template<typename T>
 class FakeMatrix2
 	{
 	private:
-		union
-			{
-			T Elements[4];
-			FakeVector2<T> Columns[2];
-			};
+		T Elements[4];
 
 	public:
 		FakeMatrix2()
@@ -260,7 +256,27 @@ class FakeMatrix2
 				}
 			}
 
+		bool operator==(const FakeMatrix2<T> &other) const
+			{
+			if (Elements[0 + 0 * 2] == other[0 + 0 * 2]
+			 && Elements[1 + 0 * 2] == other[1 + 0 * 2]
+			 && Elements[0 + 1 * 2] == other[0 + 1 * 2]
+			 && Elements[1 + 1 * 2] == other[1 + 1 * 2])
+				{
+				return true;
+				}
+			else
+				{
+				return false;
+				}
+			}
+
 		bool operator!=(const FakeMatrix2<T> &other)
+			{
+			return !(*this == other);
+			}
+
+		bool operator!=(const FakeMatrix2<T> &other) const
 			{
 			return !(*this == other);
 			}
@@ -280,12 +296,12 @@ class FakeMatrix2
 				}
 			}
 
-		bool operator<=(const FakeMatrix2<T> &other)
+		bool operator<(const FakeMatrix2<T> &other) const
 			{
-			if (Elements[0 + 0 * 2] <= other[0 + 0 * 2]
-			 && Elements[1 + 0 * 2] <= other[1 + 0 * 2]
-			 && Elements[0 + 1 * 2] <= other[0 + 1 * 2]
-			 && Elements[1 + 1 * 2] <= other[1 + 1 * 2])
+			if (Elements[0 + 0 * 2] < other[0 + 0 * 2]
+			 && Elements[1 + 0 * 2] < other[1 + 0 * 2]
+			 && Elements[0 + 1 * 2] < other[0 + 1 * 2]
+			 && Elements[1 + 1 * 2] < other[1 + 1 * 2])
 				{
 				return true;
 				}
@@ -310,7 +326,67 @@ class FakeMatrix2
 				}
 			}
 
+		bool operator>(const FakeMatrix2<T> &other) const
+			{
+			if (Elements[0 + 0 * 2] > other[0 + 0 * 2]
+			 && Elements[1 + 0 * 2] > other[1 + 0 * 2]
+			 && Elements[0 + 1 * 2] > other[0 + 1 * 2]
+			 && Elements[1 + 1 * 2] > other[1 + 1 * 2])
+				{
+				return true;
+				}
+			else
+				{
+				return false;
+				}
+			}
+
+		bool operator<=(const FakeMatrix2<T> &other)
+			{
+			if (Elements[0 + 0 * 2] <= other[0 + 0 * 2]
+			 && Elements[1 + 0 * 2] <= other[1 + 0 * 2]
+			 && Elements[0 + 1 * 2] <= other[0 + 1 * 2]
+			 && Elements[1 + 1 * 2] <= other[1 + 1 * 2])
+				{
+				return true;
+				}
+			else
+				{
+				return false;
+				}
+			}
+
+		bool operator<=(const FakeMatrix2<T> &other) const
+			{
+			if (Elements[0 + 0 * 2] <= other[0 + 0 * 2]
+			 && Elements[1 + 0 * 2] <= other[1 + 0 * 2]
+			 && Elements[0 + 1 * 2] <= other[0 + 1 * 2]
+			 && Elements[1 + 1 * 2] <= other[1 + 1 * 2])
+				{
+				return true;
+				}
+			else
+				{
+				return false;
+				}
+			}
+
 		bool operator>=(const FakeMatrix2<T> &other)
+			{
+			if (Elements[0 + 0 * 2] >= other[0 + 0 * 2]
+			 && Elements[1 + 0 * 2] >= other[1 + 0 * 2]
+			 && Elements[0 + 1 * 2] >= other[0 + 1 * 2]
+			 && Elements[1 + 1 * 2] >= other[1 + 1 * 2])
+				{
+				return true;
+				}
+			else
+				{
+				return false;
+				}
+			}
+
+		bool operator>=(const FakeMatrix2<T> &other) const
 			{
 			if (Elements[0 + 0 * 2] >= other[0 + 0 * 2]
 			 && Elements[1 + 0 * 2] >= other[1 + 0 * 2]

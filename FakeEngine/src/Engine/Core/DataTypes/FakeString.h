@@ -1,6 +1,10 @@
 #pragma once
 
-#include "FakePch.h"
+#include <cstring>
+
+// TODO
+// - Substr
+// - 
 
 class FakeString
 	{
@@ -29,6 +33,13 @@ class FakeString
 			Size = (uint32_t)strlen(str.c_str());
 			Data = new char[Size];
 			memcpy(Data, str.c_str(), Size);
+			}
+
+		FakeString(const FakeString &other, uint32_t start, uint32_t end)
+			{
+			Size = end - start;
+			Data = new char[Size];
+			memcpy(Data, &other.Data[start], Size);
 			}
 
 		FakeString(FakeString &&other) noexcept
@@ -75,22 +86,34 @@ class FakeString
 			return *this;
 			}
 
-		const wchar_t *ToWStr()
+		wchar_t *ToWStr()
 			{
-			std::string tmp = "";
-			memcpy(&tmp, Data, Size);
+			wchar_t *ret = L"";
 
-			std::wstring ws(Size, L' ');
-			ws.resize(std::mbstowcs(&ws[0], tmp.c_str(), Size));
+			for (uint32_t i = 0; i < Size; ++i)
+				ret += Data[i];
 
-			return ws.c_str();
+			return ret;
 			}
 
-		const char *ToStr()
+		const wchar_t *ToWStr() const
 			{
-			std::string tmp = "";
-			memcpy(&tmp, Data, Size);
-			return tmp.c_str();
+			wchar_t *ret = L"";
+
+			for (uint32_t i = 0; i < Size; ++i)
+				ret += Data[i];
+
+			return ret;
+			}
+
+		char *ToStr()
+			{
+			return Data;
+			}
+
+		const char *ToStr() const
+			{
+			return Data;
 			}
 
 		uint32_t Length() const noexcept
@@ -98,16 +121,151 @@ class FakeString
 			return Size;
 			}
 
-		FakeString Replace(FakeString str, size_t length, FakeString replaceValue)
+		char At(uint32_t i)
 			{
-			// TODO
+			return Data[i];
+			}
+
+		FakeString Append(const char letter)
+			{
+			uint32_t s = Size + 1;
+			char *str = new char[s];
+
+			for (uint32_t i = 0; i < s; ++i)
+				str[i] = Data[i];
+
+			str[s] = letter;
+			return FakeString(str);
+			}
+
+		FakeString Append(const FakeString &other)
+			{
+			uint32_t s = Size + other.Size;
+			char *str = new char[s];
+
+			for (uint32_t i = 0; i < Size; ++i)
+				str[i] += Data[i];
+
+			for (uint32_t i = Size; i < other.Size; ++i)
+				str[i] += other.Data[i];
+
+			return FakeString(str);
+			}
+
+		uint32_t FirstIndexOf(const char letter)
+			{
+			for (uint32_t i = 0; i < Size; ++i)
+				{
+				if (Data[i] == letter)
+					return i;
+				}
+
+			return NULL;
+			}
+
+		uint32_t IndexOf(const char letter, uint32_t offset = 0)
+			{
+			if (0 == offset)
+				return FirstIndexOf(letter);
+
+			for (uint32_t i = 0; i < Size; ++i)
+				{
+				if (Data[i] == letter && offset > 0)
+					{
+					--offset;
+					continue;
+					}
+
+				if (Data[i] == letter)
+					return i;
+				}
+
+			return NULL;
+			}
+
+		uint32_t LastIndexOf(const char letter)
+			{
+			// Count how many times the letter exists
+			uint32_t letterCount = 0;
+			for (uint32_t i = 0; i < Size; ++i)
+				{
+				if (Data[i] == letter)
+					letterCount++;
+				}
+
+			// If No Letter exists, return
+			if (0 == letterCount)
+				return NULL;
+
+			// Get the last letter index
+			for (uint32_t i = 0; i < Size; ++i)
+				{
+				if (Data[i] == letter && letterCount > 0)
+					{
+					--letterCount;
+					continue;
+					}
+
+				if (Data[i] == letter)
+					{
+					return i;
+					}
+				}
+
+			return NULL;
+			}
+
+		FakeString Split()
+			{
+			FakeString word = "";
+			for (uint32_t i = 0; i < Size; ++i)
+				{
+				if (Data[i] == ' ')
+					{
+					std::cout << word << std::endl;
+					word = "";
+					}
+				else
+					{
+					word += Data[i];
+					}
+				}
+
+			std::cout << "FIN: " << word << std::endl;
 			return "";
 			}
 
-		FakeString Find(FakeString str, size_t offset = 0) const noexcept
+		char *SplitChar()
+			{
+			char *result = new char[Size];
+			for (uint32_t i = 0; i < Size; ++i)
+				result[i] = Data[i];
+
+			return result;
+			}
+
+		FakeString Substr(uint32_t beginIndex, uint32_t endIndex = 0)
+			{
+			if ((endIndex - beginIndex) > Size)
+				return FakeString("-1");
+
+			if (endIndex == 0)
+				endIndex = Size;
+
+			return FakeString(*this, beginIndex, endIndex);
+			}
+
+		uint32_t Find(const FakeString &other) const noexcept
+			{
+			
+
+			return 0;
+			}
+
+		FakeString &Replace(const FakeString &find, const FakeString &replaceValue)
 			{
 			// TODO
-			return "";
+			return *this;
 			}
 
 		void Print()
@@ -118,10 +276,40 @@ class FakeString
 			printf("\n");
 			}
 
+		friend FakeString operator+(FakeString str, const FakeString &other)
+			{
+			return str.Append(other);
+			}
+
+		friend FakeString operator+(FakeString str, const char letter)
+			{
+			return str.Append(letter);
+			}
+
+		FakeString &operator+=(const FakeString &other)
+			{
+			return Append(other);
+			}
+
+		FakeString &operator+=(const char letter)
+			{
+			return Append(letter);
+			}
+
+		char &operator[](uint32_t i)
+			{
+			return Data[i];
+			}
+
+		const char &operator[](uint32_t i) const
+			{
+			return Data[i];
+			}
+
 		friend std::ostream &operator<<(std::ostream &stream, const FakeString &string)
 			{
 			for (uint32_t i = 0; i < string.Size; ++i)
-				stream << string.Data[i];
+				stream << string[i];
 
 			return stream;
 			}

@@ -15,11 +15,7 @@ template<typename T>
 class FakeMatrix4
 	{
 	private:
-		union
-			{
-			T Elements[16];
-			FakeVector4<T> Columns[4];
-			};
+		T Elements[16];
 
 	public:
 		FakeMatrix4()
@@ -487,15 +483,32 @@ class FakeMatrix4
 			FakeMatrix4<T> result(1);
 			result[0 + 0 * 4] = static_cast<T>(2) / (right - left);
 			result[1 + 1 * 4] = static_cast<T>(2) / (top - bottom);
-			result[2 + 2 * 4] = static_cast<T>(2) / (zNear - zFar);
+			result[2 + 2 * 4] = static_cast<T>(-2) / (zFar - zNear);
 
-			result[3 + 0 * 4] = (left + right) / (left - right);
-			result[3 + 1 * 4] = (bottom + top) / (bottom - top);
-			result[3 + 2 * 4] = (zFar - zNear) / (zFar + zNear);
+			result[3 + 0 * 4] = -(right + left) / (right - left);
+			result[3 + 1 * 4] = -(top + bottom) / (top - bottom);
+			result[3 + 2 * 4] = -(zFar + zNear) / (zFar - zNear);
 			return result;
 			}
 
-		static FakeMatrix4<T> Perspective(T fov, T width, T height, T zNear, T zFar)
+		static FakeMatrix4<T> Perspective(T fov, T aspectRatio, T zNear, T zFar)
+			{
+			T q = static_cast<T>(1) / static_cast<T>(tan(fake_radians(0.5 * fov)));
+			T a = q / aspectRatio;
+			T b = (zNear + zFar) / (zNear - zFar);
+			T c = (static_cast<T>(2) * zNear * zFar) / (zNear - zFar);
+
+			FakeMatrix4<T> result(1);
+			result[0 + 0 * 4] = a;
+			result[1 + 1 * 4] = q;
+			result[2 + 2 * 4] = b;
+			result[3 + 2 * 4] = static_cast<T>(-1);
+			result[2 + 3 * 4] = c;
+			result[3 + 3 * 4] = static_cast<T>(0);
+			return result;
+			}
+
+		static FakeMatrix4<T> PerspectiveFOV(T fov, T width, T height, T zNear, T zFar)
 			{
 			FAKE_ASSERT(width > static_cast<T>(0), "Width is less than 0!");
 			FAKE_ASSERT(height > static_cast<T>(0), "Height is less than 0!");
@@ -573,7 +586,7 @@ class FakeMatrix4
 			result[2 + 0 * 4] = -f.x;
 			result[2 + 1 * 4] = -f.y;
 			result[2 + 2 * 4] = -f.z;
-			return result * Translate(Vector3<T>(-camera.x, -camera.y, -camera.z));
+			return result * Translate(FakeVector3<T>(-camera.x, -camera.y, -camera.z));
 			}
 
 		friend FakeMatrix4<T> operator-(const FakeMatrix4<T> &other)
@@ -727,12 +740,71 @@ class FakeMatrix4
 				}
 			}
 
+		bool operator==(const FakeMatrix4<T> &other) const
+			{
+			if (Elements[0 + 0 * 4] == other[0 + 0 * 4]
+			 && Elements[1 + 0 * 4] == other[1 + 0 * 4]
+			 && Elements[2 + 0 * 4] == other[2 + 0 * 4]
+			 && Elements[3 + 0 * 4] == other[3 + 0 * 4]
+			 && Elements[0 + 1 * 4] == other[0 + 1 * 4]
+			 && Elements[1 + 1 * 4] == other[1 + 1 * 4]
+			 && Elements[2 + 1 * 4] == other[2 + 1 * 4]
+			 && Elements[3 + 1 * 4] == other[3 + 1 * 4]
+			 && Elements[0 + 2 * 4] == other[0 + 2 * 4]
+			 && Elements[1 + 2 * 4] == other[1 + 2 * 4]
+			 && Elements[2 + 2 * 4] == other[2 + 2 * 4]
+			 && Elements[3 + 2 * 4] == other[3 + 2 * 4]
+			 && Elements[0 + 3 * 4] == other[0 + 3 * 4]
+			 && Elements[1 + 3 * 4] == other[1 + 3 * 4]
+			 && Elements[2 + 3 * 4] == other[2 + 3 * 4]
+			 && Elements[3 + 3 * 4] == other[3 + 3 * 4])
+				{
+				return true;
+				}
+			else
+				{
+				return false;
+				}
+			}
+
 		bool operator!=(const FakeMatrix4<T> &other)
 			{
 			return !(*this == other);
 			}
 
+		bool operator!=(const FakeMatrix4<T> &other) const
+			{
+			return !(*this == other);
+			}
+
 		bool operator<(const FakeMatrix4<T> &other)
+			{
+			if (Elements[0 + 0 * 4] < other[0 + 0 * 4]
+			 && Elements[1 + 0 * 4] < other[1 + 0 * 4]
+			 && Elements[2 + 0 * 4] < other[2 + 0 * 4]
+			 && Elements[3 + 0 * 4] < other[3 + 0 * 4]
+			 && Elements[0 + 1 * 4] < other[0 + 1 * 4]
+			 && Elements[1 + 1 * 4] < other[1 + 1 * 4]
+			 && Elements[2 + 1 * 4] < other[2 + 1 * 4]
+			 && Elements[3 + 1 * 4] < other[3 + 1 * 4]
+			 && Elements[0 + 2 * 4] < other[0 + 2 * 4]
+			 && Elements[1 + 2 * 4] < other[1 + 2 * 4]
+			 && Elements[2 + 2 * 4] < other[2 + 2 * 4]
+			 && Elements[3 + 2 * 4] < other[3 + 2 * 4]
+			 && Elements[0 + 3 * 4] < other[0 + 3 * 4]
+			 && Elements[1 + 3 * 4] < other[1 + 3 * 4]
+			 && Elements[2 + 3 * 4] < other[2 + 3 * 4]
+			 && Elements[3 + 3 * 4] < other[3 + 3 * 4])
+				{
+				return true;
+				}
+			else
+				{
+				return false;
+				}
+			}
+
+		bool operator<(const FakeMatrix4<T> &other) const
 			{
 			if (Elements[0 + 0 * 4] < other[0 + 0 * 4]
 			 && Elements[1 + 0 * 4] < other[1 + 0 * 4]
@@ -786,6 +858,33 @@ class FakeMatrix4
 				}
 			}
 
+		bool operator>(const FakeMatrix4<T> &other) const
+			{
+			if (Elements[0 + 0 * 4] > other[0 + 0 * 4]
+			 && Elements[1 + 0 * 4] > other[1 + 0 * 4]
+			 && Elements[2 + 0 * 4] > other[2 + 0 * 4]
+			 && Elements[3 + 0 * 4] > other[3 + 0 * 4]
+			 && Elements[0 + 1 * 4] > other[0 + 1 * 4]
+			 && Elements[1 + 1 * 4] > other[1 + 1 * 4]
+			 && Elements[2 + 1 * 4] > other[2 + 1 * 4]
+			 && Elements[3 + 1 * 4] > other[3 + 1 * 4]
+			 && Elements[0 + 2 * 4] > other[0 + 2 * 4]
+			 && Elements[1 + 2 * 4] > other[1 + 2 * 4]
+			 && Elements[2 + 2 * 4] > other[2 + 2 * 4]
+			 && Elements[3 + 2 * 4] > other[3 + 2 * 4]
+			 && Elements[0 + 3 * 4] > other[0 + 3 * 4]
+			 && Elements[1 + 3 * 4] > other[1 + 3 * 4]
+			 && Elements[2 + 3 * 4] > other[2 + 3 * 4]
+			 && Elements[3 + 3 * 4] > other[3 + 3 * 4])
+				{
+				return true;
+				}
+			else
+				{
+				return false;
+				}
+			}
+
 		bool operator<=(const FakeMatrix4<T> &other)
 			{
 			if (Elements[0 + 0 * 4] <= other[0 + 0 * 4]
@@ -813,7 +912,61 @@ class FakeMatrix4
 				}
 			}
 
+		bool operator<=(const FakeMatrix4<T> &other) const
+			{
+			if (Elements[0 + 0 * 4] <= other[0 + 0 * 4]
+			 && Elements[1 + 0 * 4] <= other[1 + 0 * 4]
+			 && Elements[2 + 0 * 4] <= other[2 + 0 * 4]
+			 && Elements[3 + 0 * 4] <= other[3 + 0 * 4]
+			 && Elements[0 + 1 * 4] <= other[0 + 1 * 4]
+			 && Elements[1 + 1 * 4] <= other[1 + 1 * 4]
+			 && Elements[2 + 1 * 4] <= other[2 + 1 * 4]
+			 && Elements[3 + 1 * 4] <= other[3 + 1 * 4]
+			 && Elements[0 + 2 * 4] <= other[0 + 2 * 4]
+			 && Elements[1 + 2 * 4] <= other[1 + 2 * 4]
+			 && Elements[2 + 2 * 4] <= other[2 + 2 * 4]
+			 && Elements[3 + 2 * 4] <= other[3 + 2 * 4]
+			 && Elements[0 + 3 * 4] <= other[0 + 3 * 4]
+			 && Elements[1 + 3 * 4] <= other[1 + 3 * 4]
+			 && Elements[2 + 3 * 4] <= other[2 + 3 * 4]
+			 && Elements[3 + 3 * 4] <= other[3 + 3 * 4])
+				{
+				return true;
+				}
+			else
+				{
+				return false;
+				}
+			}
+
 		bool operator>=(const FakeMatrix4<T> &other)
+			{
+			if (Elements[0 + 0 * 4] >= other[0 + 0 * 4]
+			 && Elements[1 + 0 * 4] >= other[1 + 0 * 4]
+			 && Elements[2 + 0 * 4] >= other[2 + 0 * 4]
+			 && Elements[3 + 0 * 4] >= other[3 + 0 * 4]
+			 && Elements[0 + 1 * 4] >= other[0 + 1 * 4]
+			 && Elements[1 + 1 * 4] >= other[1 + 1 * 4]
+			 && Elements[2 + 1 * 4] >= other[2 + 1 * 4]
+			 && Elements[3 + 1 * 4] >= other[3 + 1 * 4]
+			 && Elements[0 + 2 * 4] >= other[0 + 2 * 4]
+			 && Elements[1 + 2 * 4] >= other[1 + 2 * 4]
+			 && Elements[2 + 2 * 4] >= other[2 + 2 * 4]
+			 && Elements[3 + 2 * 4] >= other[3 + 2 * 4]
+			 && Elements[0 + 3 * 4] >= other[0 + 3 * 4]
+			 && Elements[1 + 3 * 4] >= other[1 + 3 * 4]
+			 && Elements[2 + 3 * 4] >= other[2 + 3 * 4]
+			 && Elements[3 + 3 * 4] >= other[3 + 3 * 4])
+				{
+				return true;
+				}
+			else
+				{
+				return false;
+				}
+			}
+
+		bool operator>=(const FakeMatrix4<T> &other) const
 			{
 			if (Elements[0 + 0 * 4] >= other[0 + 0 * 4]
 			 && Elements[1 + 0 * 4] >= other[1 + 0 * 4]

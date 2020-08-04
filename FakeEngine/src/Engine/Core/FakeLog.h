@@ -11,10 +11,10 @@ class FakeLog
 	private:
 		static FakeLogLevel Severity;
 
-		static bool Contains(const std::string &format, const std::string &pattern);
+		static bool Contains(const FakeString &format, const FakeString &pattern);
 
 		template<typename T>
-		static std::string Replace(const std::string &format, const std::string &pattern, const T &repaceValue);
+		static FakeString Replace(const FakeString &format, const FakeString &pattern, const T &repaceValue);
 
 	public:
 		inline static void SetLogLevel(FakeLogLevel level) { Severity = level; }

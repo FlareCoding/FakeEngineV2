@@ -9,11 +9,7 @@ template<typename T>
 class FakeMatrix3
 	{
 	private:
-		union
-			{
-			T Elements[9];
-			FakeVector3<T> Columns[3];
-			};
+		T Elements[9];
 
 	public:
 		FakeMatrix3()
@@ -356,12 +352,57 @@ class FakeMatrix3
 				}
 			}
 
+		bool operator==(const FakeMatrix3<T> &other) const
+			{
+			if (Elements[0 + 0 * 3] == other[0 + 0 * 3]
+			 && Elements[1 + 0 * 3] == other[1 + 0 * 3]
+			 && Elements[2 + 0 * 3] == other[2 + 0 * 3]
+			 && Elements[0 + 1 * 3] == other[0 + 1 * 3]
+			 && Elements[1 + 1 * 3] == other[1 + 1 * 3]
+			 && Elements[2 + 1 * 3] == other[2 + 1 * 3]
+			 && Elements[0 + 2 * 3] == other[0 + 2 * 3]
+			 && Elements[1 + 2 * 3] == other[1 + 2 * 3]
+			 && Elements[2 + 2 * 3] == other[2 + 2 * 3])
+				{
+				return true;
+				}
+			else
+				{
+				return false;
+				}
+			}
+
 		bool operator!=(const FakeMatrix3<T> &other)
 			{
 			return !(*this == other);
 			}
 
+		bool operator!=(const FakeMatrix3<T> &other) const
+			{
+			return !(*this == other);
+			}
+
 		bool operator<(const FakeMatrix3<T> &other)
+			{
+			if (Elements[0 + 0 * 3] < other[0 + 0 * 3]
+			 && Elements[1 + 0 * 3] < other[1 + 0 * 3]
+			 && Elements[2 + 0 * 3] < other[2 + 0 * 3]
+			 && Elements[0 + 1 * 3] < other[0 + 1 * 3]
+			 && Elements[1 + 1 * 3] < other[1 + 1 * 3]
+			 && Elements[2 + 1 * 3] < other[2 + 1 * 3]
+			 && Elements[0 + 2 * 3] < other[0 + 2 * 3]
+			 && Elements[1 + 2 * 3] < other[1 + 2 * 3]
+			 && Elements[2 + 2 * 3] < other[2 + 2 * 3])
+				{
+				return true;
+				}
+			else
+				{
+				return false;
+				}
+			}
+
+		bool operator<(const FakeMatrix3<T> &other) const
 			{
 			if (Elements[0 + 0 * 3] < other[0 + 0 * 3]
 			 && Elements[1 + 0 * 3] < other[1 + 0 * 3]
@@ -401,6 +442,26 @@ class FakeMatrix3
 				}
 			}
 
+		bool operator>(const FakeMatrix3<T> &other) const
+			{
+			if (Elements[0 + 0 * 3] > other[0 + 0 * 3]
+			 && Elements[1 + 0 * 3] > other[1 + 0 * 3]
+			 && Elements[2 + 0 * 3] > other[2 + 0 * 3]
+			 && Elements[0 + 1 * 3] > other[0 + 1 * 3]
+			 && Elements[1 + 1 * 3] > other[1 + 1 * 3]
+			 && Elements[2 + 1 * 3] > other[2 + 1 * 3]
+			 && Elements[0 + 2 * 3] > other[0 + 2 * 3]
+			 && Elements[1 + 2 * 3] > other[1 + 2 * 3]
+			 && Elements[2 + 2 * 3] > other[2 + 2 * 3])
+				{
+				return true;
+				}
+			else
+				{
+				return false;
+				}
+			}
+
 		bool operator<=(const FakeMatrix3<T> &other)
 			{
 			if (Elements[0 + 0 * 3] <= other[0 + 0 * 3]
@@ -421,7 +482,47 @@ class FakeMatrix3
 				}
 			}
 
+		bool operator<=(const FakeMatrix3<T> &other) const
+			{
+			if (Elements[0 + 0 * 3] <= other[0 + 0 * 3]
+			 && Elements[1 + 0 * 3] <= other[1 + 0 * 3]
+			 && Elements[2 + 0 * 3] <= other[2 + 0 * 3]
+			 && Elements[0 + 1 * 3] <= other[0 + 1 * 3]
+			 && Elements[1 + 1 * 3] <= other[1 + 1 * 3]
+			 && Elements[2 + 1 * 3] <= other[2 + 1 * 3]
+			 && Elements[0 + 2 * 3] <= other[0 + 2 * 3]
+			 && Elements[1 + 2 * 3] <= other[1 + 2 * 3]
+			 && Elements[2 + 2 * 3] <= other[2 + 2 * 3])
+				{
+				return true;
+				}
+			else
+				{
+				return false;
+				}
+			}
+
 		bool operator>=(const FakeMatrix3<T> &other)
+			{
+			if (Elements[0 + 0 * 3] >= other[0 + 0 * 3]
+			 && Elements[1 + 0 * 3] >= other[1 + 0 * 3]
+			 && Elements[2 + 0 * 3] >= other[2 + 0 * 3]
+			 && Elements[0 + 1 * 3] >= other[0 + 1 * 3]
+			 && Elements[1 + 1 * 3] >= other[1 + 1 * 3]
+			 && Elements[2 + 1 * 3] >= other[2 + 1 * 3]
+			 && Elements[0 + 2 * 3] >= other[0 + 2 * 3]
+			 && Elements[1 + 2 * 3] >= other[1 + 2 * 3]
+			 && Elements[2 + 2 * 3] >= other[2 + 2 * 3])
+				{
+				return true;
+				}
+			else
+				{
+				return false;
+				}
+			}
+
+		bool operator>=(const FakeMatrix3<T> &other) const
 			{
 			if (Elements[0 + 0 * 3] >= other[0 + 0 * 3]
 			 && Elements[1 + 0 * 3] >= other[1 + 0 * 3]

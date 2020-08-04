@@ -53,7 +53,7 @@ void FakeApplication::Run()
 
 		if (ElapsedTime - t > 1.0)
 			{
-			FAKE_LOG_TRACE("FPS: %d", FrameCounter);
+		//	FAKE_LOG_TRACE("FPS: %d", FrameCounter);
 
 			FrameCounter = 0;
 			t += 1.0;

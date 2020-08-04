@@ -14,28 +14,29 @@
 
 FakeLogLevel FakeLog::Severity = FakeLogLevel::None;
 
-bool FakeLog::Contains(const std::string &format, const std::string &pattern)
+bool FakeLog::Contains(const FakeString &format, const FakeString &pattern)
 	{
-	if (format.find(pattern) != std::string::npos)
+	if (format.Find(pattern) != 0)
 		return true;
-	else
-		return false;
+	
+	return false;
 	}
 
 template<typename T>
-std::string FakeLog::Replace(const std::string &format, const std::string &pattern, const T &replaceValue)
+FakeString FakeLog::Replace(const FakeString &format, const FakeString &pattern, const T &replaceValue)
 	{
-	std::string out = format;
+	FakeString out = format;
 	std::stringstream ss;
 	ss << replaceValue;
 	
-	return out.replace(out.find(pattern), pattern.length(), ss.str());
+	//return out.Replace(out.Find(pattern), pattern.Length(), ss.str());
+	return out;
 	}
 
 void FakeLog::Print(const char *format, ...)
 	{
 	va_list args;
-	std::string out = format;
+	FakeString out = format;
 	va_start(args, format);
 
 	printf(FAKE_CONSOLE_FONT_BRIGHT);
@@ -64,6 +65,7 @@ void FakeLog::Print(const char *format, ...)
 			break;
 		}
 
+	std::cout << Contains(out, "%s") << std::endl;
 	if (Contains(out, "%s"))
 		{
 		while (Contains(out, "%s"))

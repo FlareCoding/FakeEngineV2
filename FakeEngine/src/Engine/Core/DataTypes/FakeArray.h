@@ -30,15 +30,8 @@ class FakeArray
 			return T_Size;
 			}
 
-		T *GetData()
-			{
-			return Data;
-			}
-
-		const T *GetData() const
-			{
-			return Data;
-			}
+		T *GetData() { return Data; }
+		const T *GetData() const { return Data; }
 
 		T &operator[](uint32_t i)
 			{
