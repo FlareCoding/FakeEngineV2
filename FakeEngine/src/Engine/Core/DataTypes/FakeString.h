@@ -232,9 +232,7 @@ class FakeString
 			for (uint32_t i = 0; i < Size; ++i)
 				{
 				while (Data[i] != ' ')
-					{
 					word += Data[i];
-					}
 
 				result[i] = word;
 				word = "";

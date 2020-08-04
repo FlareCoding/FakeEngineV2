@@ -11,6 +11,11 @@ class ExampleLayer : public FakeLayer
 
 			FakeString string = "Hello World!";
 			FakeString *result = string.Split();
+			for (uint32_t i = 0; i < 2; ++i)
+				{
+				std::cout << result[i] << std::endl;
+				}
+
 		//	std::cout << result << std::endl;
 
 			/*
