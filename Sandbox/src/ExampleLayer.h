@@ -7,17 +7,16 @@ class ExampleLayer : public FakeLayer
 	public:
 		virtual void OnAttach() override
 			{
-		//	FAKE_LOG_INFO("Application starts!");
+			FAKE_LOG_INFO("Application starts!");
 
-			FakeString string = "Hello World!";
-			FakeString *result = string.Split();
-		//	std::cout << result << std::endl;
+			size_t wordCount = 0;
+			FakeString helloWorld = "Hello World!";
+			FakeString* result = helloWorld.Split(&wordCount);
+			std::cout << "Word Count: " << wordCount << "\n";
 
-			/*
-			char *arr = string.SplitChar();
-			for (uint32_t i = 0; i < string.Length(); ++i)
-				std::cout << arr[i] << std::endl;
-			*/
+			for (size_t i = 0; i < wordCount; i++)
+				std::cout << result[i] << "\n";
+
 			}
 
 		virtual void OnDetach() override
