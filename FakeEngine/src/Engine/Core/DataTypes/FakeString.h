@@ -9,36 +9,40 @@
 class FakeString
 	{
 	private:
-		char *Data;
-		uint32_t Size;
+		char *Data = 0;
+		uint32_t Size = 0;
 
 	public:
 		FakeString() = default;
 		FakeString(const char *str)
 			{
 			Size = (uint32_t)strlen(str);
-			Data = new char[Size];
+			Data = new char[(size_t)Size + 1];
+			Data[Size] = '\0';
 			memcpy(Data, str, Size);
 			}
 
 		FakeString(const FakeString &other)
 			{
 			Size = other.Size;
-			Data = new char[Size];
+			Data = new char[(size_t)Size + 1];
+			Data[Size] = '\0';
 			memcpy(Data, other.Data, Size);
 			}
 
 		FakeString(const std::string &str)
 			{
 			Size = (uint32_t)strlen(str.c_str());
-			Data = new char[Size];
+			Data = new char[(size_t)Size + 1];
+			Data[Size] = '\0';
 			memcpy(Data, str.c_str(), Size);
 			}
 
 		FakeString(const FakeString &other, uint32_t start, uint32_t end)
 			{
 			Size = end - start;
-			Data = new char[Size];
+			Data = new char[(size_t)Size + 1];
+			Data[Size] = '\0';
 			memcpy(Data, &other.Data[start], Size);
 			}
 
@@ -60,10 +64,11 @@ class FakeString
 			{
 			if (this != &other)
 				{
-				delete[] Data;
+				if (Data) delete[] Data;
 
 				Size = other.Size;
-				Data = new char[Size];
+				Data = new char[(size_t)Size + 1];
+				Data[Size] = '\0';
 
 				memcpy(Data, other.Data, Size);
 				}
@@ -75,10 +80,11 @@ class FakeString
 			{
 			if (this != &other)
 				{
-				delete[] Data;
+				if (Data) delete[] Data;
 
 				Size = other.Size;
-				Data = new char[Size];
+				Data = new char[(size_t)Size + 1];
+				Data[Size] = '\0';
 
 				memcpy(Data, other.Data, Size);
 				}
@@ -127,7 +133,7 @@ class FakeString
 			}
 
 		FakeString Append(const char letter)
-			{
+		{
 			uint32_t s = Size + 1;
 			char *str = new char[s];
 
@@ -135,8 +141,8 @@ class FakeString
 				str[i] = Data[i];
 
 			str[s] = letter;
-			return FakeString(str);
-			}
+			return FakeString(str);		
+		}
 
 		FakeString Append(const FakeString &other)
 			{
@@ -215,28 +221,37 @@ class FakeString
 			return NULL;
 			}
 
-		FakeString *Split()
+		FakeString *Split(size_t* outWordCount = 0)
 			{
 			// First get the word count to construct the size of the array
 			// Then iterate through the string and put every word into the array
 
-			uint32_t wordCount = 0;
+			uint32_t wordCount = 1;
 			for (uint32_t i = 0; i < Size; ++i)
-				{
+			{
 				if (Data[i] == ' ')
 					++wordCount;
-				}
+			}
 
-			FakeString *result = new FakeString[wordCount];
-			FakeString word = "";
-			for (uint32_t i = 0; i < Size; ++i)
+			FakeString* result = new FakeString[wordCount];
+
+			uint32_t charIdx = 0;
+			for (uint32_t i = 0; i < wordCount; i++)
+			{
+				uint32_t wordBeginIdx = charIdx;
+				while (Data[charIdx] != ' ' && Data[charIdx] != '\0')
 				{
-				while (Data[i] != ' ')
-					word += Data[i];
-
-				result[i] = word;
-				word = "";
+					charIdx++;
 				}
+
+				FakeString word = Substr(wordBeginIdx, charIdx);
+				result[i] = word;
+
+				charIdx++;
+			}
+
+			if (outWordCount)
+				*outWordCount = wordCount;
 
 			return result;
 			}
