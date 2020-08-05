@@ -11,8 +11,6 @@ class FakeLog
 	private:
 		static FakeLogLevel Severity;
 
-		static bool Contains(const FakeString &format, const FakeString &pattern);
-
 		template<typename T>
 		static FakeString Replace(const FakeString &format, const FakeString &pattern, const T &repaceValue);
 

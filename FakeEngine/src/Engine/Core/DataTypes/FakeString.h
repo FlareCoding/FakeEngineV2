@@ -2,9 +2,6 @@
 
 #include <cstring>
 
-// TODO:
-// - 
-
 // TEMP: move to FakeFileUtils
 static char impl_to_upper_case(char letter)
 	{

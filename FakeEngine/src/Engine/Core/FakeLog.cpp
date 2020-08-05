@@ -14,14 +14,6 @@
 
 FakeLogLevel FakeLog::Severity = FakeLogLevel::None;
 
-bool FakeLog::Contains(const FakeString &format, const FakeString &pattern)
-	{
-	if (format.Find(pattern) != 0)
-		return true;
-	
-	return false;
-	}
-
 template<typename T>
 FakeString FakeLog::Replace(const FakeString &format, const FakeString &pattern, const T &replaceValue)
 	{
@@ -29,8 +21,7 @@ FakeString FakeLog::Replace(const FakeString &format, const FakeString &pattern,
 	std::stringstream ss;
 	ss << replaceValue;
 	
-	//return out.Replace(out.Find(pattern), pattern.Length(), ss.str());
-	return out;
+	return out.Replace(pattern, ss.str());
 	}
 
 void FakeLog::Print(const char *format, ...)
@@ -65,100 +56,99 @@ void FakeLog::Print(const char *format, ...)
 			break;
 		}
 
-	std::cout << Contains(out, "%s") << std::endl;
-	if (Contains(out, "%s"))
+	if (out.Contains("%s"))
 		{
-		while (Contains(out, "%s"))
+		while (out.Contains("%s"))
 			{
 			char *s = va_arg(args, char*);
 			out = Replace<char*>(out, "%s", s);
 			}
 		}
 
-	if (Contains(out, "%ll"))
+	if (out.Contains("%ll"))
 		{
-		while (Contains(out, "%ll"))
+		while (out.Contains("%ll"))
 			{
 			long long l = va_arg(args, long long);
 			out = Replace<long long>(out, "%ll", l);
 			}
 		}
 
-	if (Contains(out, "%l"))
+	if (out.Contains("%l"))
 		{
-		while (Contains(out, "%l"))
+		while (out.Contains("%l"))
 			{
 			long l = va_arg(args, long);
 			out = Replace<long>(out, "%l", l);
 			}
 		}
 
-	if (Contains(out, "%ud"))
+	if (out.Contains("%ud"))
 		{
-		while (Contains(out, "%ud"))
+		while (out.Contains("%ud"))
 			{
 			unsigned int d = va_arg(args, unsigned int);
 			out = Replace<unsigned int>(out, "%ud", d);
 			}
 		}
 
-	if (Contains(out, "%d"))
+	if (out.Contains("%d"))
 		{
-		while (Contains(out, "%d"))
+		while (out.Contains("%d"))
 			{
 			int d = va_arg(args, int);
 			out = Replace<int>(out, "%d", d);
 			}
 		}
 
-	if (Contains(out, "%f"))
+	if (out.Contains("%f"))
 		{
-		while (Contains(out, "%f"))
+		while (out.Contains("%f"))
 			{
 			double f = va_arg(args, double);
 			out = Replace<double>(out, "%f", f);
 			}
 		}
 
-	if (Contains(out, "%v2f"))
+	if (out.Contains("%v2f"))
 		{
-		while (Contains(out, "%v2f"))
+		while (out.Contains("%v2f"))
 			{
 			FakeVec2f vector = va_arg(args, FakeVec2f);
 			out = Replace<FakeVec2f>(out, "%v2f", vector);
 			}
 		}
 
-	if (Contains(out, "%v3f"))
+	if (out.Contains("%v3f"))
 		{
-		while (Contains(out, "%v3f"))
+		while (out.Contains("%v3f"))
 			{
 			FakeVec3f vector = va_arg(args, FakeVec3f);
 			out = Replace<FakeVec3f>(out, "%v3f", vector);
 			}
 		}
 
-	if (Contains(out, "%v4f"))
+	if (out.Contains("%v4f"))
 		{
-		while (Contains(out, "%v4f"))
+		while (out.Contains("%v4f"))
 			{
 			FakeVec4f vector = va_arg(args, FakeVec4f);
 			out = Replace<FakeVec4f>(out, "%v4f", vector);
 			}
 		}
 
-	if (Contains(out, "%m2f"))
+	if (out.Contains("%m2f"))
 		{
-		while (Contains(out, "%m2f"))
+		while (out.Contains("%m2f"))
 			{
 			FakeMat2f mat = va_arg(args, FakeMat2f);
 			out = Replace<FakeMat2f>(out, "%m2f", mat);
 			}
 		}
 
-	if (Contains(out, "%m3f"))
+	if (out.Contains("%m3f"))
 		{
-		while (Contains(out, "%m3f"))
+		while (out.Contains("%m3f"))
 			{
 			FakeMat3f mat = va_arg(args, FakeMat3f);
 			out = Replace<FakeMat3f>(out, "%m3f", mat);

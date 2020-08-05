@@ -7,8 +7,11 @@ class ExampleLayer : public FakeLayer
 	public:
 		virtual void OnAttach() override
 			{
-		//	FAKE_LOG_INFO("Application starts!");
+			FAKE_LOG_INFO("Application starts!");
 
+			FAKE_LOG_TRACE("%s %s!", "Hello", "World");
+
+			/*
 			FakeString ex1 = "Hello World!";
 			std::cout << "Before: " << ex1 << std::endl;
 			ex1.Replace("Hello", "Nice");
@@ -19,6 +22,7 @@ class ExampleLayer : public FakeLayer
 			ex2.Replace("yes", "NO");
 			ex2.Replace("will do", "will not do");
 			std::cout << "After: " << ex2 << std::endl;
+			*/
 			}
 
 		virtual void OnDetach() override
