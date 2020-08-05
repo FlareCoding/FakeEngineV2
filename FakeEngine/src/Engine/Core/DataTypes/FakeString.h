@@ -529,6 +529,18 @@ class FakeString
 			return *this;
 			}
 
+		FakeString& Reverse()
+		{
+			for (size_t i = 0; i < Size / 2; i++)
+			{
+				char temp = Data[i];
+				Data[i] = Data[Size - i - 1];
+				Data[Size - i - 1] = temp;
+			}
+
+			return *this;
+		}
+
 		void Print()
 			{
 			for (uint32_t i = 0; i < Size; i++)
