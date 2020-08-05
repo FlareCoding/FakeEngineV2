@@ -3,7 +3,6 @@
 #include <cstring>
 
 // TODO:
-// - -= operator (it should replace the given string with an empty string)
 // - 
 
 // TEMP: move to FakeFileUtils
@@ -337,6 +336,73 @@ class FakeString
 			return *this;
 			}
 
+		FakeString &Remove(const char letter)
+			{
+			if (Contains(letter))
+				{
+				uint32_t i = 0;
+				uint32_t j = 0;
+				uint32_t start_pos = Find(letter);
+				uint32_t new_size = Size - 1;
+				char *new_data = new char[new_size];
+
+				if (Data)
+					{
+					// Copy the part before the letter, if there is a part
+					if (start_pos > 0)
+						{
+						memcpy(new_data, Data, start_pos);
+						j = start_pos;
+						}
+					
+					for (i = start_pos + 1; i < Size; ++i)
+						{
+						new_data[j] = Data[i];
+						++j;
+						}
+
+					delete[] Data;
+					}
+
+				Data = new_data;
+				Size = new_size;
+				}
+
+			return *this;
+			}
+
+		FakeString &Remove(const FakeString &other)
+			{
+			if (Contains(other))
+				{
+				uint32_t i = 0;
+				uint32_t j = 0;
+				uint32_t start_pos = Find(other);
+				uint32_t new_size = Size - other.Length();
+				char *new_data = new char[new_size];
+
+				if (Data)
+					{
+					if (start_pos > 0)
+						memcpy(new_data, Data, start_pos); // Copy only the part before other if there is a part before it
+
+					// Copy the part after other
+					for (i = start_pos + other.Length(); i < Size; ++i)
+						{
+						new_data[j] = Data[i];
+						++j;
+						}
+
+					delete[] Data;
+					}
+
+				Data = new_data;
+				Size = new_size;
+				}
+
+			return *this;
+			}
+
 		uint32_t FirstIndexOf(const char letter)
 			{
 			for (uint32_t i = 0; i < Size; ++i)
@@ -455,6 +521,22 @@ class FakeString
 			return FakeString(*this, beginIndex, endIndex);
 			}
 
+		bool Contains(const char letter, uint32_t offset = 0)
+			{
+			bool hasLetter = false;
+
+			for (uint32_t i = 0; i < Size; ++i)
+				{
+				if (Data[i] == letter)
+					{
+					hasLetter = true;
+					break;
+					}
+				}
+
+			return hasLetter;
+			}
+
 		bool Contains(const FakeString &other, uint32_t offset = 0)
 			{
 			uint32_t i = offset;
@@ -482,28 +564,45 @@ class FakeString
 			return false;
 			}
 
+		uint32_t Find(const char letter, uint32_t offset = 0) const noexcept
+			{
+			uint32_t i = 0;
+			uint32_t pos = 0;
+
+			for (i = 0; i < Size; ++i)
+				{
+				if (Data[i] == letter)
+					{
+					pos = i;
+					break;
+					}
+				}
+
+			return pos;
+			}
+
 		uint32_t Find(const FakeString &other, uint32_t offset = 0) const noexcept
 			{
 			for (uint32_t i = offset; i < Size; i++)
-			{
-				if (Data[i] == other.Data[0])
 				{
+				if (Data[i] == other.Data[0])
+					{
 					bool valid = true;
 					for (uint32_t j = 0; j < other.Size; j++)
-					{
-						if (Data[i + j] == '\0' || Data[i + j] != other.Data[j])
 						{
+						if (Data[i + j] == '\0' || Data[i + j] != other.Data[j])
+							{
 							valid = false;
 							break;
+							}
 						}
-					}
 
 					if (valid) return i;
 
 					i += other.Size - 1;
+					}
 				}
-			}
-
+			
 			return 0;
 			}
 
@@ -512,13 +611,13 @@ class FakeString
 			uint32_t occurences = 0;
 			uint32_t offset = 0;
 			while (Contains(find, offset))
-			{
+				{
 				occurences++;
 				offset = Find(find, offset) + find.Length();
 
 				if (occurencesToReplace && occurences == occurencesToReplace)
 					break;
-			}
+				}
 
 			if (!occurences) 
 				return *this;
@@ -526,32 +625,32 @@ class FakeString
 			uint32_t* occurence_indices = new uint32_t[occurences];
 			offset = 0;
 			for (uint32_t i = 0; i < occurences; i++)
-			{
+				{
 				occurence_indices[i] = Find(find, offset);
 				offset = occurence_indices[i] + find.Length();
-			}
+				}
 
 			uint32_t new_size = Size + ((replaceValue.Length() - find.Length()) * occurences);
-			char* new_data = new char[(size_t)new_size + 1];
+			char *new_data = new char[(size_t)new_size + 1];
 			new_data[(size_t)new_size] = '\0';
 
 			uint32_t occurence_idx = 0;
 			for (uint32_t DataIdx = 0, NewDataIdx = 0; DataIdx < Size;)
-			{
-				if (DataIdx != occurence_indices[occurence_idx])
 				{
+				if (DataIdx != occurence_indices[occurence_idx])
+					{
 					new_data[NewDataIdx] = Data[DataIdx];
 					NewDataIdx++;
 					DataIdx++;
-				}
+					}
 				else
-				{
+					{
 					memcpy(new_data + NewDataIdx, replaceValue.Data, replaceValue.Length());
 					NewDataIdx += replaceValue.Length();
 					DataIdx += find.Length();
 					occurence_idx++;
+					}
 				}
-			}
 
 			if (Data) delete[] Data;
 			Data = new_data;
@@ -631,6 +730,49 @@ class FakeString
 
 			result[Size + 1] = '\0';
 			return result;
+			}
+
+		bool operator==(const FakeString &other)
+			{
+			bool result = false;
+			uint32_t charEqualCount = 0;
+			uint32_t i = 0;
+
+			for (i = 0; i < Size; ++i)
+				{
+				if (Data[i] == other[i])
+					++charEqualCount;
+				}
+
+			if (Size == other.Size && charEqualCount == Size)
+				result = true;
+
+			return result;
+			}
+
+		bool operator!=(const FakeString &other)
+			{
+			return !(*this == other);
+			}
+
+		friend FakeString operator-(FakeString str, const FakeString &other)
+			{
+			return str.Remove(other);
+			}
+
+		friend FakeString operator-(FakeString str, const char letter)
+			{
+			return str.Remove(letter);
+			}
+
+		FakeString &operator-=(const FakeString &other)
+			{
+			return Remove(other);
+			}
+
+		FakeString &operator-=(const char letter)
+			{
+			return Remove(letter);
 			}
 
 		friend FakeString operator+(FakeString str, const FakeString &other)
