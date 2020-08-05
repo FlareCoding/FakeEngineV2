@@ -9,11 +9,10 @@ class ExampleLayer : public FakeLayer
 			{
 		//	FAKE_LOG_INFO("Application starts!");
 
-			FakeString lol = "Test";
-
-			wchar_t *test = lol.ToWStr();
-
-
+			FakeString str = "Hello World!";
+			std::cout << "Original: " << str << "\n";
+			str.Reverse();
+			std::cout << "Reversed: " << str << "\n";
 			}
 
 		virtual void OnDetach() override
