@@ -9,13 +9,15 @@ class ExampleLayer : public FakeLayer
 			{
 			FAKE_LOG_INFO("Application starts!");
 
-			size_t wordCount = 0;
-			FakeString helloWorld = "Hello World!";
-			FakeString* result = helloWorld.Split(&wordCount);
-			std::cout << "Word Count: " << wordCount << "\n";
+			FakeString str = "Tes";
+			std::cout << "Old: " << str << "\n";
+			str += 't';
+			std::cout << "New: " << str << "\n\n";
 
-			for (size_t i = 0; i < wordCount; i++)
-				std::cout << result[i] << "\n";
+			FakeString str2 = "Hello";
+			std::cout << "Old: " << str2 << "\n";
+			str2 += " World!";
+			std::cout << "New: " << str2 << "\n";
 
 			}
 
