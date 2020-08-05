@@ -603,7 +603,7 @@ class FakeString
 			return 0;
 			}
 
-		FakeString &Replace(const FakeString &find, const FakeString &replaceValue)
+		FakeString &Replace(const FakeString &find, const FakeString &replaceValue, uint32_t occurencesToReplace = 0)
 			{
 			uint32_t occurences = 0;
 			uint32_t offset = 0;
@@ -611,6 +611,9 @@ class FakeString
 				{
 				occurences++;
 				offset = Find(find, offset) + find.Length();
+
+				if (occurencesToReplace && occurences == occurencesToReplace)
+					break;
 				}
 
 			if (!occurences) 
