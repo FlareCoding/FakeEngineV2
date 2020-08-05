@@ -132,31 +132,35 @@ class FakeString
 			return Data[i];
 			}
 
-		FakeString Append(const char letter)
+		FakeString& Append(const char letter)
 		{
-			uint32_t s = Size + 1;
-			char *str = new char[s];
+			char* new_data = new char[(size_t)Size + 2]; // +1 for a character and another +1 for the null terminator
+			new_data[Size] = letter;
+			new_data[Size + 1] = '\0';
+			if (Data) memcpy(new_data, Data, Size);
 
-			for (uint32_t i = 0; i < s; ++i)
-				str[i] = Data[i];
+			if (Data) delete[] Data;
+			Data = new_data;
+			++Size;
 
-			str[s] = letter;
-			return FakeString(str);		
+			return *this;
 		}
 
-		FakeString Append(const FakeString &other)
-			{
-			uint32_t s = Size + other.Size;
-			char *str = new char[s];
+		FakeString& Append(const FakeString &other)
+		{
+			uint32_t new_size = Size + other.Size;
+			char* new_data = new char[(size_t)new_size + 1]; // +1 for the null terminator
 
-			for (uint32_t i = 0; i < Size; ++i)
-				str[i] += Data[i];
+			new_data[new_size] = '\0';
+			if (Data) memcpy(new_data, Data, Size);						// copy existing string data
+			memcpy((char*)(new_data + Size), other.Data, other.Size);	// copy appended string data
 
-			for (uint32_t i = Size; i < other.Size; ++i)
-				str[i] += other.Data[i];
+			if (Data) delete[] Data;
+			Data = new_data;
+			Size = new_size;
 
-			return FakeString(str);
-			}
+			return *this;
+		}
 
 		uint32_t FirstIndexOf(const char letter)
 			{
