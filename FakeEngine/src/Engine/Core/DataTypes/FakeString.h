@@ -3,8 +3,8 @@
 #include <cstring>
 
 // TODO:
-// - Replace
-// - Find
+// - fix Replace
+// - -= operator (it should replace the given string with an empty string)
 // - 
 
 // TEMP: move to FakeFileUtils
@@ -483,16 +483,51 @@ class FakeString
 			return false;
 			}
 
-		uint32_t Find(const FakeString &other) const noexcept
+		uint32_t Find(const FakeString &other, uint32_t offset = 0) const noexcept
 			{
-			// TODO
+			uint32_t i = 0;
+			uint32_t j = 0;
+			uint32_t pos = 0;
 
-			return 0;
+			for (i = offset; i < Size; i++)
+				{
+				if (Data[i] == other.Data[j])
+					{
+					if (0 == j)
+						pos = i;
+
+					++j;
+					if (j == other.Size)
+						return pos;
+					else
+						j = 0;
+					}
+				}
+
+			return pos;
 			}
 
 		FakeString &Replace(const FakeString &find, const FakeString &replaceValue)
 			{
-			// TODO
+			if (Contains(find))
+				{
+				uint32_t pos = Find(find);
+				uint32_t replaceCounter = 0;
+				uint32_t j = 0;
+
+				for (uint32_t i = pos; i < Size; ++i)
+					{
+					if (Data[i] == '\0' || replaceValue[j] == '\0')
+						break;
+
+					Data[i] = replaceValue[j];
+					++replaceCounter;
+					++j;
+					}
+
+				Size -= replaceCounter;			// Subtract the removed letter count
+				Size += replaceValue.Length();	// Add the length of the replaceValue
+				}
 
 			return *this;
 			}
@@ -529,17 +564,17 @@ class FakeString
 			return *this;
 			}
 
-		FakeString& Reverse()
-		{
-			for (size_t i = 0; i < Size / 2; i++)
+		FakeString &Reverse()
 			{
+			for (size_t i = 0; i < Size / 2; i++)
+				{
 				char temp = Data[i];
 				Data[i] = Data[Size - i - 1];
 				Data[Size - i - 1] = temp;
-			}
+				}
 
 			return *this;
-		}
+			}
 
 		void Print()
 			{

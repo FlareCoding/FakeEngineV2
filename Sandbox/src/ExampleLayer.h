@@ -10,9 +10,8 @@ class ExampleLayer : public FakeLayer
 		//	FAKE_LOG_INFO("Application starts!");
 
 			FakeString str = "Hello World!";
-			std::cout << "Original: " << str << "\n";
-			str.Reverse();
-			std::cout << "Reversed: " << str << "\n";
+			str.Replace("Hello", "Nice");
+			std::cout << str << std::endl;
 			}
 
 		virtual void OnDetach() override
