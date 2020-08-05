@@ -521,6 +521,22 @@ class FakeString
 			return FakeString(*this, beginIndex, endIndex);
 			}
 
+		bool Contains(const char letter, uint32_t offset = 0)
+			{
+			bool hasLetter = false;
+
+			for (uint32_t i = 0; i < Size; ++i)
+				{
+				if (Data[i] == letter)
+					{
+					hasLetter = true;
+					break;
+					}
+				}
+
+			return hasLetter;
+			}
+
 		bool Contains(const FakeString &other, uint32_t offset = 0)
 			{
 			uint32_t i = offset;
@@ -568,25 +584,25 @@ class FakeString
 		uint32_t Find(const FakeString &other, uint32_t offset = 0) const noexcept
 			{
 			for (uint32_t i = offset; i < Size; i++)
-			{
-				if (Data[i] == other.Data[0])
 				{
+				if (Data[i] == other.Data[0])
+					{
 					bool valid = true;
 					for (uint32_t j = 0; j < other.Size; j++)
-					{
-						if (Data[i + j] == '\0' || Data[i + j] != other.Data[j])
 						{
+						if (Data[i + j] == '\0' || Data[i + j] != other.Data[j])
+							{
 							valid = false;
 							break;
+							}
 						}
-					}
 
 					if (valid) return i;
 
 					i += other.Size - 1;
+					}
 				}
-			}
-
+			
 			return 0;
 			}
 
@@ -595,10 +611,10 @@ class FakeString
 			uint32_t occurences = 0;
 			uint32_t offset = 0;
 			while (Contains(find, offset))
-			{
+				{
 				occurences++;
 				offset = Find(find, offset) + find.Length();
-			}
+				}
 
 			if (!occurences) 
 				return *this;
@@ -606,32 +622,32 @@ class FakeString
 			uint32_t* occurence_indices = new uint32_t[occurences];
 			offset = 0;
 			for (uint32_t i = 0; i < occurences; i++)
-			{
+				{
 				occurence_indices[i] = Find(find, offset);
 				offset = occurence_indices[i] + find.Length();
-			}
+				}
 
 			uint32_t new_size = Size + ((replaceValue.Length() - find.Length()) * occurences);
-			char* new_data = new char[(size_t)new_size + 1];
+			char *new_data = new char[(size_t)new_size + 1];
 			new_data[(size_t)new_size] = '\0';
 
 			uint32_t occurence_idx = 0;
 			for (uint32_t DataIdx = 0, NewDataIdx = 0; DataIdx < Size;)
-			{
-				if (DataIdx != occurence_indices[occurence_idx])
 				{
+				if (DataIdx != occurence_indices[occurence_idx])
+					{
 					new_data[NewDataIdx] = Data[DataIdx];
 					NewDataIdx++;
 					DataIdx++;
-				}
+					}
 				else
-				{
+					{
 					memcpy(new_data + NewDataIdx, replaceValue.Data, replaceValue.Length());
 					NewDataIdx += replaceValue.Length();
 					DataIdx += find.Length();
 					occurence_idx++;
+					}
 				}
-			}
 
 			if (Data) delete[] Data;
 			Data = new_data;
