@@ -20,8 +20,7 @@ FakeString FakeLog::Replace(const FakeString &format, const FakeString &pattern,
 	FakeString out = format;
 	std::stringstream ss;
 	ss << replaceValue;
-	
-	return out.Replace(pattern, ss.str());
+	return out.Replace(pattern, ss.str(), 1);
 	}
 
 void FakeLog::Print(const char *format, ...)
