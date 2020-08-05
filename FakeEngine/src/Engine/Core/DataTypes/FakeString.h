@@ -4,7 +4,6 @@
 
 // TODO:
 // - fix Replace
-// - -= operator (it should replace the given string with an empty string)
 // - 
 
 // TEMP: move to FakeFileUtils
@@ -338,6 +337,73 @@ class FakeString
 			return *this;
 			}
 
+		FakeString &Remove(const char letter)
+			{
+			if (Contains(letter))
+				{
+				uint32_t i = 0;
+				uint32_t j = 0;
+				uint32_t start_pos = Find(letter);
+				uint32_t new_size = Size - 1;
+				char *new_data = new char[new_size];
+
+				if (Data)
+					{
+					// Copy the part before the letter, if there is a part
+					if (start_pos > 0)
+						{
+						memcpy(new_data, Data, start_pos);
+						j = start_pos;
+						}
+					
+					for (i = start_pos + 1; i < Size; ++i)
+						{
+						new_data[j] = Data[i];
+						++j;
+						}
+
+					delete[] Data;
+					}
+
+				Data = new_data;
+				Size = new_size;
+				}
+
+			return *this;
+			}
+
+		FakeString &Remove(const FakeString &other)
+			{
+			if (Contains(other))
+				{
+				uint32_t i = 0;
+				uint32_t j = 0;
+				uint32_t start_pos = Find(other);
+				uint32_t new_size = Size - other.Length();
+				char *new_data = new char[new_size];
+
+				if (Data)
+					{
+					if (start_pos > 0)
+						memcpy(new_data, Data, start_pos); // Copy only the part before other if there is a part before it
+
+					// Copy the part after other
+					for (i = start_pos + other.Length(); i < Size; ++i)
+						{
+						new_data[j] = Data[i];
+						++j;
+						}
+
+					delete[] Data;
+					}
+
+				Data = new_data;
+				Size = new_size;
+				}
+
+			return *this;
+			}
+
 		uint32_t FirstIndexOf(const char letter)
 			{
 			for (uint32_t i = 0; i < Size; ++i)
@@ -456,6 +522,22 @@ class FakeString
 			return FakeString(*this, beginIndex, endIndex);
 			}
 
+		bool Contains(const char letter)
+			{
+			bool containsLetter = false;
+
+			for (uint32_t i = 0; i < Size; ++i)
+				{
+				if (Data[i] == letter)
+					{
+					containsLetter = true;
+					break;
+					}
+				}
+
+			return containsLetter;
+			}
+
 		bool Contains(const FakeString &other)
 			{
 			uint32_t i = 0;
@@ -481,6 +563,23 @@ class FakeString
 				}
 
 			return false;
+			}
+
+		uint32_t Find(const char letter, uint32_t offset = 0) const noexcept
+			{
+			uint32_t i = 0;
+			uint32_t pos = 0;
+
+			for (i = 0; i < Size; ++i)
+				{
+				if (Data[i] == letter)
+					{
+					pos = i;
+					break;
+					}
+				}
+
+			return pos;
 			}
 
 		uint32_t Find(const FakeString &other, uint32_t offset = 0) const noexcept
@@ -509,25 +608,7 @@ class FakeString
 
 		FakeString &Replace(const FakeString &find, const FakeString &replaceValue)
 			{
-			if (Contains(find))
-				{
-				uint32_t pos = Find(find);
-				uint32_t replaceCounter = 0;
-				uint32_t j = 0;
-
-				for (uint32_t i = pos; i < Size; ++i)
-					{
-					if (Data[i] == '\0' || replaceValue[j] == '\0')
-						break;
-
-					Data[i] = replaceValue[j];
-					++replaceCounter;
-					++j;
-					}
-
-				Size -= replaceCounter;			// Subtract the removed letter count
-				Size += replaceValue.Length();	// Add the length of the replaceValue
-				}
+			// TODO
 
 			return *this;
 			}
@@ -602,6 +683,49 @@ class FakeString
 
 			result[Size + 1] = '\0';
 			return result;
+			}
+
+		bool operator==(const FakeString &other)
+			{
+			bool result = false;
+			uint32_t charEqualCount = 0;
+			uint32_t i = 0;
+
+			for (i = 0; i < Size; ++i)
+				{
+				if (Data[i] == other[i])
+					++charEqualCount;
+				}
+
+			if (Size == other.Size && charEqualCount == Size)
+				result = true;
+
+			return result;
+			}
+
+		bool operator!=(const FakeString &other)
+			{
+			return !(*this == other);
+			}
+
+		friend FakeString operator-(FakeString str, const FakeString &other)
+			{
+			return str.Remove(other);
+			}
+
+		friend FakeString operator-(FakeString str, const char letter)
+			{
+			return str.Remove(letter);
+			}
+
+		FakeString &operator-=(const FakeString &other)
+			{
+			return Remove(other);
+			}
+
+		FakeString &operator-=(const char letter)
+			{
+			return Remove(letter);
 			}
 
 		friend FakeString operator+(FakeString str, const FakeString &other)
