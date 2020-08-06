@@ -8,6 +8,7 @@ class FakeString
 	private:
 		char *Data = 0;
 		uint32_t Size = 0;
+		unsigned long hash = 0;
 
 	public:
 		FakeString() = default;
@@ -17,6 +18,8 @@ class FakeString
 			Data = new char[(size_t)Size + 1];
 			Data[Size] = '\0';
 			memcpy(Data, str, Size);
+
+			CreateHash();
 			}
 
 		FakeString(const FakeString &other)
@@ -25,6 +28,8 @@ class FakeString
 			Data = new char[(size_t)Size + 1];
 			Data[Size] = '\0';
 			memcpy(Data, other.Data, Size);
+
+			CreateHash();
 			}
 
 		FakeString(const std::string &str)
@@ -33,6 +38,8 @@ class FakeString
 			Data = new char[(size_t)Size + 1];
 			Data[Size] = '\0';
 			memcpy(Data, str.c_str(), Size);
+
+			CreateHash();
 			}
 
 		FakeString(const FakeString &other, uint32_t start, uint32_t end)
@@ -41,6 +48,8 @@ class FakeString
 			Data = new char[(size_t)Size + 1];
 			Data[Size] = '\0';
 			memcpy(Data, &other.Data[start], Size);
+
+			CreateHash();
 			}
 
 		FakeString(FakeString &&other) noexcept
@@ -50,11 +59,13 @@ class FakeString
 
 			other.Size = 0;
 			other.Data = nullptr;
+
+			CreateHash();
 			}
 
 		~FakeString()
 			{
-			delete[] Data;
+			if (Data) delete[] Data;
 			}
 
 		FakeString &operator=(const FakeString &other)
@@ -91,23 +102,23 @@ class FakeString
 
 		wchar_t *ToWStr()
 			{
-			wchar_t *ret = new wchar_t[Size + 1];
+			wchar_t *ret = new wchar_t[(size_t)Size + 1];
 
 			for (uint32_t i = 0; i < Size; ++i)
 				ret[i] = Data[i];
 
-			ret[Size + 1] = '\0';
+			ret[Size] = '\0';
 			return ret;
 			}
 
 		const wchar_t *ToWStr() const
 			{
-			wchar_t *ret = new wchar_t[Size + 1];
+			wchar_t *ret = new wchar_t[(size_t)Size + 1];
 
 			for (uint32_t i = 0; i < Size; ++i)
 				ret[i] = Data[i];
 
-			ret[Size + 1] = '\0';
+			ret[Size] = '\0';
 			return ret;
 			}
 
@@ -126,6 +137,11 @@ class FakeString
 			return Size;
 			}
 
+		unsigned long Hash() const 
+			{ 
+			return hash; 
+			}
+
 		char At(uint32_t i)
 			{
 			return Data[i];
@@ -142,6 +158,7 @@ class FakeString
 			Data = new_data;
 			++Size;
 
+			CreateHash();
 			return *this;
 			}
 
@@ -158,6 +175,7 @@ class FakeString
 			Data = new_data;
 			Size = new_size;
 
+			CreateHash();
 			return *this;
 			}
 
@@ -193,6 +211,7 @@ class FakeString
 				Size = new_size;
 				}
 
+			CreateHash();
 			return *this;
 			}
 
@@ -225,6 +244,7 @@ class FakeString
 				Size = new_size;
 				}
 
+			CreateHash();
 			return *this;
 			}
 
@@ -482,6 +502,8 @@ class FakeString
 			Size = new_size;
 
 			delete[] occurence_indices;
+
+			CreateHash();
 			return *this;
 			}
 
@@ -490,6 +512,7 @@ class FakeString
 			for (uint32_t i = 0; i < Size; ++i)
 				Data[i] = fake_string_helper_to_lower_case(Data[i]);
 
+			CreateHash();
 			return *this;
 			}
 
@@ -506,6 +529,7 @@ class FakeString
 			for (uint32_t i = 0; i < Size; ++i)
 				Data[i] = fake_string_helper_to_upper_case(Data[i]);
 
+			CreateHash();
 			return *this;
 			}
 
@@ -526,6 +550,7 @@ class FakeString
 				Data[Size - i - 1] = temp;
 				}
 
+			CreateHash();
 			return *this;
 			}
 
@@ -636,5 +661,17 @@ class FakeString
 				stream << string[i];
 
 			return stream;
+			}
+
+	private:
+		void CreateHash()
+			{
+			unsigned long result = 0x3B6C;
+			char* ptr = Data;
+			int c;
+			while (c = *ptr++)
+				result = ((result << 5) + result) + c;
+
+			hash = result;
 			}
 	};
